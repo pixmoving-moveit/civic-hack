@@ -5,6 +5,7 @@ from cantools.db import load_file as load_dbc_file
 from rospkg import RosPack
 import rospy
 from std_msgs.msg import String
+from pprint import PrettyPrinter
 
 """
 Node to subscribe to a can_msgs/Frame topic showing the
@@ -26,11 +27,40 @@ class FrameDecoder(object):
                                    queue_size=10)
         self.frame_sub = rospy.Subscriber('can_frame_msgs', Frame,
                                           self._cb, queue_size=10)
+        self.msg_id_to_msg_name = {}
+        understood_msgs = []
+        for msg in self.can_msg_parser.messages:
+            this_msg = {}
+            this_msg['frame_id'] = msg.frame_id
+            this_msg['name'] = msg.name
+            this_msg['signals'] = msg.signals
+            this_msg['nodes'] = msg.nodes
+            understood_msgs.append(this_msg)
+            self.msg_id_to_msg_name[msg.frame_id] = msg.name
+
+        rospy.loginfo("We can interpret the messages:")
+        pp = PrettyPrinter()
+        rospy.loginfo(pp.pformat(understood_msgs))
 
     def _cb(self, data):
+        # message looks like:
+        # header:
+        #   seq: 10450
+        #   stamp:
+        #     secs: 1520743044
+        #     nsecs: 188934087
+        #   frame_id: ''
+        # id: 304
+        # is_rtr: False
+        # is_extended: False
+        # is_error: False
+        # dlc: 8
+        # data: [0, 0, 4, 92, 110, 16, 4, 36]
         try:
-            human_friendly = str(
-                self.can_msg_parser.decode_message(data.id, data.data))
+            msg = self.can_msg_parser.decode_message(data.id, data.data)
+            msg['frame_id'] = data.id
+            msg['message_name'] = self.msg_id_to_msg_name[data.id]
+            human_friendly = str(msg)
         except KeyError:
             human_friendly = "ID: " + str(data.id) + " not known"
         except ValueError:

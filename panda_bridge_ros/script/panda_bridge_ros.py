@@ -30,6 +30,10 @@ class PandaBridge(object):
 
             # Reading gives us up to 256 messages
             can_msg_block = self.panda.can_recv()
+            # A message looks like:
+            # [(420, 55639, bytearray(b'\x00f\x00\x00\x00\x00\x00:'), 0),
+            # (428, 55761, bytearray(b'\x7f\xff\x00\x00\x00\x08\x002'), 0),
+            # ... ]
 
             if can_msg_block:
                 for msg in can_msg_block:
@@ -47,7 +51,8 @@ class PandaBridge(object):
         frame.is_rtr = 0
         frame.is_extended = 0
 
-        frame.data = can_msg[2]
+        # hacky conversion to uint8
+        frame.data = str(can_msg[2])
         frame.header.frame_id = ""
         frame.header.stamp = rospy.get_rostime()
 

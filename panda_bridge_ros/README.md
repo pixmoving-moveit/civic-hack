@@ -4,6 +4,8 @@ Package to expose CAN frames using the awesome [panda board from comma.ai](https
 
 Developed to expose the Honda Civic 2016 information in the [moveit hackathon](https://www.pixmoving.com/move-it) in Guiyang, China (March 2018).
 
+Note that you may need to follow the [panda instructions for the udev rules](https://community.comma.ai/wiki/index.php/Panda).
+
 # Dependences
 
 **Note**: rosdep should resolve them once [this PR](https://github.com/ros/rosdistro/pull/17106) is accepted to add them as rosdep keys.
@@ -20,6 +22,6 @@ ROS:
 # Nodes
 
 * [panda_bridge_ros.py](scripts/panda_bridge_ros.py): Contains the node that connects to the panda board and exposes in the `can_frame_msgs` `can_msgs/Frame` topic the messages read.
-* [frame_decoder.py](scripts/frame_decoder.py): Node that subscribes to the `can_frame_msgs` topic and publishes in `can_frame_msgs_human_friendly` `std_msgs/String` a dictionary with the CAN bus message translated from the dbc file for Honda Civic 2016.
+* [frame_decoder.py](scripts/frame_decoder.py): Node that subscribes to the `can_frame_msgs` topic and publishes in `can_frame_msgs_human_friendly` `std_msgs/String` a dictionary with the CAN bus message translated from the dbc file for Honda Civic 2016. Understood messages can be found in [Understood_messages.md](Understood_messages.md).
 
 
