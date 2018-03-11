@@ -2,46 +2,59 @@
 
 import rospy
 from panda import Panda
-from std_msgs.msg import String
 from can_msgs.msg import Frame
 
-def panda_bridge_ros():
+"""
+Node to connect to a panda board connected to a CAN bus
+and show the CAN messages thru a can_msgs/Frame topic.
 
-    can_pub_ = rospy.Publisher('can_frame_msgs', Frame, queue_size=10)
-    rospy.init_node('can_bridge', anonymous=True)
-    rate = rospy.Rate(200) # 10hz
+Author: Pier-Marc Comtois-Rivet <pm.rivet at gmail.com>
+Author: Sammy Pfeiffer <Sammy.Pfeiffer at student.uts.edu.au>
+"""
 
-    panda = Panda()
 
-    while not rospy.is_shutdown():
+class PandaBridge(object):
+    def __init__(self, rate=200):
+        self.can_pub = rospy.Publisher('can_frame_msgs', Frame, queue_size=10)
+        rospy.loginfo("Setting up publisher to: " +
+                      str(self.can_pub.resolved_name))
+        self.rate = rate
+        rospy.loginfo("Reading from panda board at " + str(self.rate) + " Hz.")
+        rospy.loginfo("Connecting to Panda board...")
+        self.panda = Panda()
+        rospy.loginfo("Connected.")
 
-	can_msg = panda.can_recv()
+    def run(self):
+        rate = rospy.Rate(self.rate)
+        while not rospy.is_shutdown():
 
-	if can_msg:
+            # Reading gives us up to 256 messages
+            can_msg_block = self.panda.can_recv()
 
-		frame = convert_panda_to_msg(can_msg[0])
-		frame.header.frame_id = ""
-		frame.header.stamp = rospy.get_rostime()
+            if can_msg_block:
+                for msg in can_msg_block:
+                    frame = self.convert_panda_to_msg(msg)
+                    self.can_pub.publish(frame)
 
-		can_pub_.publish(frame)
+            rate.sleep()
 
-    	rate.sleep()
+    def convert_panda_to_msg(self, can_msg):
 
-def convert_panda_to_msg(can_msg):
-	
-	frame = Frame()
-	frame.id = can_msg[0]
-	frame.dlc = 8 
-	frame.is_error = 0
-	frame.is_rtr = 0
-	frame.is_extended = 0
+        frame = Frame()
+        frame.id = can_msg[0]
+        frame.dlc = 8
+        frame.is_error = 0
+        frame.is_rtr = 0
+        frame.is_extended = 0
 
-	frame.data = can_msg[2]
+        frame.data = can_msg[2]
+        frame.header.frame_id = ""
+        frame.header.stamp = rospy.get_rostime()
 
-	return frame
+        return frame
+
 
 if __name__ == '__main__':
-    try:
-        panda_bridge_ros()
-    except rospy.ROSInterruptException:
-        pass
+    rospy.init_node('can_bridge', anonymous=True)
+    pb = PandaBridge()
+    pb.run()
