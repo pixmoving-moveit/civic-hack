@@ -22,6 +22,7 @@ class PandaBridge(object):
         rospy.loginfo("Reading from panda board at " + str(self.rate) + " Hz.")
         rospy.loginfo("Connecting to Panda board...")
         self.panda = Panda()
+        self.panda.set_safety_mode(self.panda.SAFETY_HONDA)
         rospy.loginfo("Connected.")
 
     def run(self):
@@ -30,6 +31,7 @@ class PandaBridge(object):
 
             # Reading gives us up to 256 messages
             can_msg_block = self.panda.can_recv()
+            # print can_msg_block
             # A message looks like:
             # [(420, 55639, bytearray(b'\x00f\x00\x00\x00\x00\x00:'), 0),
             # (428, 55761, bytearray(b'\x7f\xff\x00\x00\x00\x08\x002'), 0),

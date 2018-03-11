@@ -40,6 +40,7 @@ class PandaBridgePub(object):
 
             # Reading gives us up to 256 messages
             can_msg_block = self.panda.can_recv()
+            # print can_msg_block
             # A message looks like:
             # [(420, 55639, bytearray(b'\x00f\x00\x00\x00\x00\x00:'), 0),
             # (428, 55761, bytearray(b'\x7f\xff\x00\x00\x00\x08\x002'), 0),

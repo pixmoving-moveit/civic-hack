@@ -9,9 +9,16 @@ For the Honda Civic 2016 from the pixmoving moveit hackathon:
 We needed to connect to one of the CAN buses (it has two). We made a connector to attach ourselves
 to the camera thing.
 
-![](our_connector.jpg)
+Pinout of the connector of MobilEye:
+![](images/pinout_civic_connector.jpg)
 
-We used a [pandacan board]() to connect to the CAN bus and a laptop to it. 
+Pinout of the ODB II connector:
+![](images/pinout_connector.jpg)
+
+Which the hacky setup of the panda board connected to the MobilEye connector in the car looks like:
+![](images/setup_panda_in_civic.jpg)
+
+We used a Pandacan board ([wiki](https://community.comma.ai/wiki/index.php/Panda#LED_Indicators), [github docs](https://github.com/commaai/panda), [how to get started](https://medium.com/@comma_ai/a-panda-and-a-cabana-how-to-get-started-car-hacking-with-comma-ai-b5e46fae8646)) to connect to the CAN bus and a laptop to it. 
 
 It's extremely easy to use, just install `pip install pandacan` and you can be reading the CAN bus with:
 
@@ -27,7 +34,7 @@ print(data)
 # ... ]
 ```
 
-Note that you need to add yourself to the dialout group or just run the script as root.
+Note that you may need to add [linux udev rules](https://community.comma.ai/wiki/index.php/Panda#Linux_udev_rules) to be able to run without root scripts that use Panda.
 
 
 ## Understand the CAN data
