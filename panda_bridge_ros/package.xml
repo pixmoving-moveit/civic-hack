@@ -16,8 +16,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>can_msgs</exec_depend>
-  <exec_depend>python-pandacan</exec_depend>
-  <exec_depend>python-cantools</exec_depend>
+  <exec_depend>python-pandacan-pip</exec_depend>
+  <exec_depend>python-cantools-pip</exec_depend>
 
 
 
