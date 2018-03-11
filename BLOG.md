@@ -2,7 +2,7 @@
 
 For the Honda Civic 2016 from the pixmoving moveit hackathon:
 
-![](honda_civic_pixmoving.jpg)
+![](images/honda_civic_pixmoving.jpg)
 
 ## Connect to the CAN bus
 
