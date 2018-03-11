@@ -22,6 +22,7 @@ ROS:
 # Nodes
 
 * [panda_bridge_ros.py](scripts/panda_bridge_ros.py): Contains the node that connects to the panda board and exposes in the `/can_frame_msgs` `can_msgs/Frame` topic the messages read.
+* [bridge_and_send.py](scripts/bridge_and_send.py): Contains the node that connects to the panda board and exposes in the `/can_frame_msgs` `can_msgs/Frame` topic the messages read, it also listens to the topic `/send_can_msg` which will send the `can_msgs/Frame` published to the CAN bus.
 * [frame_decoder.py](scripts/frame_decoder.py): Node that subscribes to the `can_frame_msgs` topic and publishes in `/can_frame_msgs_human_friendly` `std_msgs/String` a dictionary with the CAN bus message translated from the dbc file for Honda Civic 2016. Understood messages can be found in [Understood_messages.md](Understood_messages.md).
 
 

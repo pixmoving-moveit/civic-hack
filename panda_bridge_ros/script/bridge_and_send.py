@@ -16,7 +16,7 @@ Author: Pier-Marc Comtois-Rivet <pm.rivet at gmail.com>
 
 
 class PandaBridgePub(object):
-    def __init__(self, rate=200):
+    def __init__(self, rate=1000):
         self.can_pub = rospy.Publisher('can_frame_msgs', Frame, queue_size=10)
         rospy.loginfo("Setting up publisher to: " +
                       str(self.can_pub.resolved_name))
