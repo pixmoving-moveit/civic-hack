@@ -15,8 +15,8 @@ if __name__ == '__main__':
     print("Connecting to panda...")
     panda = Panda()
     print("Setting safety mode SAFETY_HONDA")
-    panda.set_safety_mode(panda.SAFETY_HONDA)
-    # panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
+    # panda.set_safety_mode(panda.SAFETY_HONDA)
+    panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
 
     # What we know about braking:
     #  {'frame_id': 506,
@@ -78,11 +78,12 @@ if __name__ == '__main__':
     total_cmds_sent = 0
     try:
         while raw_input() == '':
-            cmd = create_brake_command(True, True, True, 0, idx_counter)
-            print("Sending: " + str(cmd) + " (#" + str(total_cmds_sent) + ")")
-            panda.can_send(cmd[0], cmd[2], 0)
-            idx_counter += 1
-            idx_counter %= 4
-            total_cmds_sent += 1
+            for i in range(100):
+                cmd = create_brake_command(True, True, True, 0, idx_counter)
+                print("Sending: " + str(cmd) + " (#" + str(total_cmds_sent) + ")")
+                panda.can_send(cmd[0], cmd[2], 0)
+                idx_counter += 1
+                idx_counter %= 4
+                total_cmds_sent += 1
     except KeyboardInterrupt:
         panda.close()

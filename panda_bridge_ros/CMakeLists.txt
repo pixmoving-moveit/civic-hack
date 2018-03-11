@@ -33,7 +33,8 @@ catkin_package()
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
   scripts/frame_decoder.py
-  scritps/panda_bridge_ros.py
+  scripts/panda_bridge_ros.py
+  scripts/bridge_and_send.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
