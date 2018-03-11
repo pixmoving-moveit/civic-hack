@@ -60,11 +60,25 @@ class FrameDecoder(object):
             msg = self.can_msg_parser.decode_message(data.id, data.data)
             msg['frame_id'] = data.id
             msg['message_name'] = self.msg_id_to_msg_name[data.id]
+            msg['raw_msg'] = str(data.data)
             human_friendly = str(msg)
+            # string will look like:
+            # {'message_name': 'STEERING_CONTROL', 'CHECKSUM': 5, 'COUNTER': 1,
+            # 'STEER_TORQUE': 0, 'frame_id': 228, 'SET_ME_X00': 0,
+            # 'raw_msg': '\x00\x00\x00\x00\x15\x00\x00\x00',
+            # 'STEER_TORQUE_REQUEST': 0, 'SET_ME_X00_2': 0}
         except KeyError:
-            human_friendly = "ID: " + str(data.id) + " not known"
+            msg = {}
+            msg['frame_id'] = data.id
+            msg['message_name'] = "UNKNOWN_MESSAGE"
+            msg['raw_msg'] = str(data.data)
+            human_friendly = str(msg)
         except ValueError:
-            human_friendly = "ID: " + str(data.id) + " not known"
+            msg = {}
+            msg['frame_id'] = data.id
+            msg['message_name'] = "UNKNOWN_MESSAGE"
+            msg['raw_msg'] = str(data.data)
+            human_friendly = str(msg)
 
         self.pub.publish(human_friendly)
 
