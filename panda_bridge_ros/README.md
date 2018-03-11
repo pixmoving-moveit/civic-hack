@@ -8,7 +8,7 @@ Note that you may need to follow the [panda instructions for the udev rules](htt
 
 # Dependences
 
-**Note**: rosdep should resolve them once [this PR](https://github.com/ros/rosdistro/pull/17106) is accepted to add them as rosdep keys.
+You can install the dependences running `rosdep install panda_bridge_ros` (if you already made a workspace with this package checked out). Or `rosdep install panda_bridge_ros --from-paths YOUR_PATH_TO_panda_bridge_ros`.
 
 Python:
 
