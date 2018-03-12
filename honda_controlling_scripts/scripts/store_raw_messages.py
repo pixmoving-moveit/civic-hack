@@ -13,8 +13,8 @@ if __name__ == '__main__':
         print(sys.argv[0] + " prefix_name")
         exit(0)
     filename = sys.argv[1]
-    filename.endswith('.pickle')
-    filename = filename[:-7]
+    if filename.endswith('.pickle'):
+        filename = filename[:-7]
     p = Panda()
 
     accum = []
@@ -32,5 +32,5 @@ if __name__ == '__main__':
         dump(accum, open(filename + '.pickle', 'w'))
         dump(timestamps, open(filename + '_timestamps.pickle', 'w'))
 
-    print(filename + ".pickle contains " +
-          str(len(accum)) + " blocks of CAN messages.")
+        print(filename + ".pickle contains " +
+              str(len(accum)) + " blocks of CAN messages.")
