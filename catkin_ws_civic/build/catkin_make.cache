@@ -1,2 +1,0 @@
-panda_bridge_ros
--DCATKIN_DEVEL_PREFIX=/home/ahmed/tmp/civic-hack/catkin_ws_civic/devel -DCMAKE_INSTALL_PREFIX=/home/ahmed/tmp/civic-hack/catkin_ws_civic/install -G Unix Makefiles

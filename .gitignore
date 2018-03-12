@@ -1,1 +1,3 @@
 *.pyc
+.idea
+.catkin_workspace
