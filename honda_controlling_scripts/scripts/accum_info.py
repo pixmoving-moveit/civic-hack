@@ -11,9 +11,9 @@ if __name__ == '__main__':
         exit(0)
     fname = sys.argv[1]
     fname = fname.replace('.pickle', '')
-    print("fname: " + fname)
+    # print("fname: " + fname)
     accum_fname = fname + ".pickle"
-    print("accum_fname: " + str(accum_fname))
+    # print("accum_fname: " + str(accum_fname))
     timestamps_fname = fname + "_timestamps.pickle"
     accum = load(open(accum_fname, 'r'))
     timestamps = load(open(timestamps_fname, 'r'))

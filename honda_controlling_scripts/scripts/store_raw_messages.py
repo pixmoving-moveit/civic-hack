@@ -23,7 +23,7 @@ if __name__ == '__main__':
         while True:
             block = p.can_recv()
             if block:
-                accum.append()
+                accum.append(block)
                 timestamps.append(time.time())
             if len(accum) % 10000 == 0:
                 print("Stored " + str(len(accum)) + " blocks of messages...")
