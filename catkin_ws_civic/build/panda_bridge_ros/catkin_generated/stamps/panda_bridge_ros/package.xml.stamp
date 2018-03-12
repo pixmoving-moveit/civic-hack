@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>panda_bridge_ros</name>
+  <version>0.0.0</version>
+  <description>The panda_bridge_ros package</description>
+
+  <maintainer email="pm.rivet@gmail.com">Pier-Marc Comtois-Rivet</maintainer>
+  <maintainer email="Sammy.Pfeiffer@student.uts.edu.au">Sammy Pfeiffer</maintainer>
+
+
+  <license>BSD</license>
+
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>can_msgs</exec_depend>
+  <exec_depend>python-pandacan-pip</exec_depend>
+  <exec_depend>python-cantools-pip</exec_depend>
+
+
+
+</package>

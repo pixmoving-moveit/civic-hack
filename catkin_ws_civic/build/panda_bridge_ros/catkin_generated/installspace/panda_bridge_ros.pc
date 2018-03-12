@@ -1,0 +1,8 @@
+prefix=/home/ahmed/tmp/civic-hack/catkin_ws_civic/install
+
+Name: panda_bridge_ros
+Description: Description of panda_bridge_ros
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ahmed/tmp/civic-hack/catkin_ws_civic/install/lib 
+Requires: 
