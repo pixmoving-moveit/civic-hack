@@ -6,24 +6,25 @@ from cPickle import load, loads, dump, dumps
 import sys
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         print("Usage: ")
-        print(sys.argv[0] + " accum.pickle")
+        print(sys.argv[0] + " accum.pickle id1 id2 id3 ...")
         exit(0)
     pickle_accum_file = sys.argv[1]
-    pickle_timestamps_file = pickle_accum_file.replace('.pickle', '_timestamps.pickle')
+    pickle_timestamps_file = pickle_accum_file.replace(
+        '.pickle', '_timestamps.pickle')
     print("Cleaning up files: " + pickle_accum_file +
           " and " + pickle_timestamps_file)
-    # ADAS messages to send
-    # STEERING_CONTROL, BRAKE_COMMAND, GAS_COMMAND, ACC_HUD, LKAS_HUD, HIGHBEAM_CONTROL, RADAR_HUD
-    ids_ADAS_hex = [0xe4, 0x1fa, 0x200, 0x30c, 0x33d, 0x35e, 0x39f]
-    ids_ADAS = [228, 506, 512, 780, 829, 862, 927]
-    print("Keeping only ADAS ids: " + str(ids_ADAS))
+    ids_to_remove = []
+    for id_ in sys.argv[2:]:
+        ids_to_remove.append(int(id_))
+
+    print("Going to remove ids: " + str(ids_to_remove))
 
     accum = load(open(pickle_accum_file, 'r'))
     timestamps = load(open(pickle_timestamps_file, 'r'))
-    filtered_accum, filtered_timestamps = filter_accum_keep(
-        ids_ADAS, accum, timestamps)
+    filtered_accum, filtered_timestamps = filter_accum_remove(
+        ids_to_remove, accum, timestamps)
 
     filtered_fname = pickle_accum_file.replace('.pickle', '_filtered.pickle')
     filtered_t_fname = pickle_timestamps_file.replace(

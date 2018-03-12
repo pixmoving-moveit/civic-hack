@@ -1,25 +1,30 @@
 #!/usr/bin/env python
 
 from panda import Panda
-from cPickle import dump, dumps, load, loads
+from cPickle import dump
 import time
 import sys
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
+        print("Store raw messages from panda board can_recv into a pickle file.")
         print("Usage:")
-        print(sys.argv[0] + " name_for_pickle_file")
+        print(sys.argv[0] + " prefix_name")
         exit(0)
     filename = sys.argv[1]
+    filename.endswith('.pickle')
+    filename = filename[:-7]
     p = Panda()
 
     accum = []
     timestamps = []
     try:
         while True:
-            accum.append(p.can_recv())
-            timestamps.append(time.time())
+            block = p.can_recv()
+            if block:
+                accum.append()
+                timestamps.append(time.time())
             if len(accum) % 10000 == 0:
                 print("Stored " + str(len(accum)) + " blocks of messages...")
     except KeyboardInterrupt:

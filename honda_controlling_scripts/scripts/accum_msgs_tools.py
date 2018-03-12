@@ -42,9 +42,9 @@ def filter_messages_remove(frame_ids_to_remove, array_of_msgs):
     """
     filtered_arr = []
     for msg in array_of_msgs:
-        frame_id, _, data = msg
+        frame_id, _, data, bus = msg
         if type(data) != str:
-            msg = (frame_id, _, str(data))
+            msg = (frame_id, _, str(data), bus)
         remove_frame = False
         for id_to_remove in frame_ids_to_remove:
             if frame_id == id_to_remove:
@@ -62,9 +62,9 @@ def filter_messages_keep(frame_ids_to_keep, array_of_msgs):
     """
     filtered_arr = []
     for msg in array_of_msgs:
-        frame_id, _, data = msg
+        frame_id, _, data, bus = msg
         if type(data) != str:
-            msg = (frame_id, _, str(data))
+            msg = (frame_id, _, str(data), bus)
         for id_to_keep in frame_ids_to_keep:
             if frame_id == id_to_keep:
                 filtered_arr.append(msg)
@@ -82,6 +82,7 @@ def filter_accum_remove(frame_ids_to_remove, accum, timestamps):
             frame_ids_to_remove, array_of_msgs)
         if filtered_array:
             filtered_timestamps.append(timestamp)
+            filtered_accum.append(filtered_array)
     return filtered_accum, filtered_timestamps
 
 
@@ -95,4 +96,5 @@ def filter_accum_keep(frame_ids_to_keep, accum, timestamps):
         filtered_array = filter_messages_keep(frame_ids_to_keep, array_of_msgs)
         if filtered_array:
             filtered_timestamps.append(timestamp)
+            filtered_accum.append(filtered_array)
     return filtered_accum, filtered_timestamps
