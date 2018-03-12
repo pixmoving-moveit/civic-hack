@@ -47,9 +47,7 @@ class PandaBridgePub(object):
             # ... ]
 
             if can_msg_block:
-                for msg in can_msg_block:
-                    frame = self.convert_panda_to_msg(msg)
-                    self.can_pub.publish(frame)
+                self.process_msg_block(can_msg_block)
 
             if self.to_send_msgs:
                 # copy current msgs to send and reset buffer
@@ -60,6 +58,11 @@ class PandaBridgePub(object):
                     self.send_can_msg(msg)
 
             rate.sleep()
+
+    def process_msg_block(self, can_msg_block):
+        for msg in can_msg_block:
+            frame = self.convert_panda_to_msg(msg)
+            self.can_pub.publish(frame)
 
     def send_can_msg(self, frame):
         self.panda.can_send(frame.id, str(frame.data), 0)

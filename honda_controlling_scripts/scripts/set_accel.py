@@ -13,10 +13,10 @@ Author: Sammy Pfeiffer <Sammy.Pfeiffer at student.uts.edu.au>
 
 if __name__ == '__main__':
     print("Connecting to panda...")
-    #panda = Panda()
+    panda = Panda()
     print("Setting safety mode SAFETY_HONDA")
     # panda.set_safety_mode(panda.SAFETY_HONDA)
-    #panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
+    panda.set_safety_mode(panda.SAFETY_ALLOUTPUT)
 
     # What we know about gas:
     # {'frame_id': 512,
@@ -39,22 +39,22 @@ if __name__ == '__main__':
     can_msg_parser = load_dbc_file(pkg_path + '/config/' +
                                    'honda_civic_touring_2016_can_for_cantools.dbc')
 
-    # Let's double check the brake_cmd
-    decoded_gas_cmd = can_msg_parser.decode_message(gas_cmd[0],
-                                                    gas_cmd[2])
-    print decoded_gas_cmd
+    # # Let's double check the brake_cmd
+    # decoded_gas_cmd = can_msg_parser.decode_message(gas_cmd[0],
+    #                                                 gas_cmd[2])
+    # print decoded_gas_cmd
 
-    exit(0)
+    # exit(0)
 
     print("Press Enter to send gas commands")
     idx_counter = 0
     total_cmds_sent = 0
     try:
         while raw_input() == '':
-            for i in range(100):
-                cmd = create_gas_command(10, idx_counter)
+            for i in range(1):
+                cmd = create_gas_command(16000, idx_counter)
                 print("Sending: " + str(cmd) +
-                      " (#" + str(total_cmds_sent) + ")")
+                      " (#" + str(total_cmds_sent) + ") counter: " + str(idx_counter))
                 panda.can_send(cmd[0], cmd[2], 0)
                 idx_counter += 1
                 idx_counter %= 4
