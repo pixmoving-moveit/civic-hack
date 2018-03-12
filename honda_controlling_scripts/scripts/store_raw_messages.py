@@ -31,6 +31,6 @@ if __name__ == '__main__':
         p.close()
         dump(accum, open(filename + '.pickle', 'w'))
         dump(timestamps, open(filename + '_timestamps.pickle', 'w'))
-
+        print("\n\n")
         print(filename + ".pickle contains " +
               str(len(accum)) + " blocks of CAN messages.")
