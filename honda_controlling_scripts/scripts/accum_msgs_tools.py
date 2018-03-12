@@ -17,7 +17,7 @@ def to_sendeable_block(array_of_msgs, can_bus=0):
     """
     new_arr = []
     for msg in array_of_msgs:
-        new_arr.append(msg[0], str(msg[2], can_bus))
+        new_arr.append((msg[0], msg[1], str(msg[2]), can_bus))
     return new_arr
 
 
