@@ -98,6 +98,22 @@ def filter_messages_keep(frame_ids_to_keep, array_of_msgs):
     return filtered_arr
 
 
+def filter_messages_keep_bus(frame_ids_to_keep, array_of_msgs, bus_to_keep):
+    """Given an array of can msgs, remove the messages that have  ids
+    NOT in frame_ids_to_keep and return. If the data field is in bytearray
+    format it will be changed to str.
+    """
+    filtered_arr = []
+    for msg in array_of_msgs:
+        frame_id, _, data, bus = msg
+        if type(data) != str:
+            msg = (frame_id, _, str(data), bus)
+        for id_to_keep in frame_ids_to_keep:
+            if frame_id == id_to_keep and bus == bus_to_keep:
+                filtered_arr.append(msg)
+    return filtered_arr
+
+
 def filter_accum_remove(frame_ids_to_remove, accum, timestamps):
     """Do filter_message_remove for every block in the array
     of can_recv.
@@ -121,6 +137,20 @@ def filter_accum_keep(frame_ids_to_keep, accum, timestamps):
     filtered_timestamps = []
     for array_of_msgs, timestamp in zip(accum, timestamps):
         filtered_array = filter_messages_keep(frame_ids_to_keep, array_of_msgs)
+        if filtered_array:
+            filtered_timestamps.append(timestamp)
+            filtered_accum.append(filtered_array)
+    return filtered_accum, filtered_timestamps
+
+
+def filter_accum_keep_bus(frame_ids_to_keep, accum, timestamps, bus):
+    """Do filter_messages_keep for every block in the array of
+    can_recv.
+    """
+    filtered_accum = []
+    filtered_timestamps = []
+    for array_of_msgs, timestamp in zip(accum, timestamps):
+        filtered_array = filter_messages_keep_bus(frame_ids_to_keep, array_of_msgs, bus)
         if filtered_array:
             filtered_timestamps.append(timestamp)
             filtered_accum.append(filtered_array)
