@@ -50,7 +50,39 @@ def create_brake_command(apply_brake, pcm_override, pcm_cancel_cmd, chime, idx):
 
 def create_gas_command(gas_amount, idx):
     """Creates a CAN message for the Honda DBC GAS_COMMAND."""
-    msg = struct.pack("!H", gas_amount)
+    # enable_bit = 1 << 7
+    # max_gas = 176.526
+    # offset = -83.3
+    # scaled_offset = offset / 1023.0 * max_gas
+    # offset_raw = 21
+    # offset2_raw = 11
+    # print(offset_raw)
+    # print(scaled_offset)
+    # gas_amount_ = (float(gas_amount) / 1023.0) * max_gas
+    # print(gas_amount_)
+    # gas_amount_2 = (float(gas_amount) / 1023.0) * max_gas / 2.0
+    # gas_amount_ = gas_amount_ + offset_raw
+    # print(gas_amount_)
+    # gas_amount_2 = gas_amount_2 + offset2_raw
+
+    # gas_amount_ = int(gas_amount_ / max_gas * 1023.0)
+    # gas_amount_2 = int(gas_amount_2 / max_gas * 1023.0)
+    # print("gas 1 gas 2")
+    # print(gas_amount_)
+    # print(gas_amount_2)
+
+    offset1_raw = 328  # 21
+    offset2_raw = 656  # 11
+    gas_amount_1 = gas_amount + offset1_raw
+    gas_amount_2 = gas_amount * 2 + offset2_raw
+    if gas_amount <= 0:
+        enable_bit = 0
+    else:
+        enable_bit = 1 << 7
+
+    if gas_amount <= 0:
+        enable_bit = 0
+    msg = struct.pack("!HHB", gas_amount_1, gas_amount_2, enable_bit)
     return make_can_msg(0x200, msg, idx, 0)
 
 
