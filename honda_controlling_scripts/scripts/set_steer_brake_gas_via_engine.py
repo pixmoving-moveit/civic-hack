@@ -28,7 +28,7 @@ class AllPublisher(object):
         self.steer_val = 0
         self.engine_modifier = 0.0
         self.sub_engine = rospy.Subscriber('/joy', Joy,
-            self.engine_cb, queue_size=1)
+                                           self.engine_cb, queue_size=1)
         self.sub_steer = rospy.Subscriber(
             '/steering_amount', Int16, self.steer_cb, queue_size=1)
         self.sub_brake = rospy.Subscriber(
@@ -78,7 +78,6 @@ class AllPublisher(object):
                     last_engine_rpm = fields['ENGINE_RPM']
                     break
 
-
             # Engine rpm stuff
             if self.engine_modifier != 0.0:
                 # we need to invert the modifier signal
@@ -86,13 +85,16 @@ class AllPublisher(object):
                 # so we need to create a engine data message that ssays
                 # we are driving slower than we should in order for it to accelerate
                 # limit to +- 15kmph the max acceleration requested
-                speed = last_received_xmission_speed  + (15.0 * self.engine_modifier * -1.0)
-                print("latest_received_xmission_speed: " + str(last_received_xmission_speed))
-                print("we modify by: "  + str((15.0 * self.engine_modifier * -1.0)))
+                speed = last_received_xmission_speed + \
+                    (15.0 * self.engine_modifier * -1.0)
+                print("latest_received_xmission_speed: " +
+                      str(last_received_xmission_speed))
+                print("we modify by: " + str((15.0 * self.engine_modifier * -1.0)))
                 print("which results in: " + str(speed))
 
-                # (xmission_speed, engine_rpm=2000, odometer=3, idx=0):                
-                cmd = create_engine_data(speed, last_engine_rpm, last_received_odometer, idx_counter_engine)
+                # (xmission_speed, engine_rpm=2000, odometer=3, idx=0):
+                cmd = create_engine_data(
+                    speed, last_engine_rpm, last_received_odometer, idx_counter_engine)
                 idx_counter_engine += 1
                 idx_counter_engine %= 4
                 print("command is: " + str(cmd))
@@ -110,7 +112,8 @@ class AllPublisher(object):
                 self.p.can_send(cmd[0], cmd[2], 1)
 
                 # (apply_brake, pcm_override, pcm_cancel_cmd, chime, idx):
-                cmd = create_brake_command(self.brake_val, 1, 0, 0, idx_counter)
+                cmd = create_brake_command(
+                    self.brake_val, 1, 0, 0, idx_counter)
                 # print("Sending: " + str(cmd) +
                 #       " (#" + str(total_cmds_sent) +
                 #       ") brake val: " + str(self.brake_val))
