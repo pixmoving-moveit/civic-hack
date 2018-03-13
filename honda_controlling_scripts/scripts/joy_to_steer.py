@@ -11,7 +11,7 @@ class JoyToSteer(object):
         self.sub = rospy.Subscriber('/joy', Joy, self.joy_cb, queue_size=1)
 
     def joy_cb(self, data):
-        left_right = data.axes[0]
+        left_right = data.axes[0] * -1
         amount_steer = int(left_right * 3840)
         self.pub.publish(amount_steer)
         print("amount_steer: " + str(amount_steer))
