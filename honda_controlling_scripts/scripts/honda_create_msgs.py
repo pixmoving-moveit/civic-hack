@@ -48,6 +48,35 @@ def create_brake_command(apply_brake, pcm_override, pcm_cancel_cmd, chime, idx):
     return make_can_msg(0x1fa, msg, idx, 0)
 
 
+def create_buttons_command(cruise_button_press, cruise_setting, idx):
+    # cruise_button_press can be accel_res, decel_set, cancel, main, none
+    # cruise_Setting can be distance_adj, lkas_button, none
+    # {'frame_id': 662,
+    #  'name': 'SCM_BUTTONS',
+    #  'nodes': ['SCM'],
+    #  'signals': [signal('CRUISE_BUTTONS', 7, 3, 'big_endian', False, 1, 0, 0, 7, 'None', False, None, {7: 'tbd', 6: 'tbd', 5: 'tbd', 4: 'accel_res', 3: 'decel_set', 2: 'cancel', 1: 'main', 0: 'none'}, None),
+    #              signal('CRUISE_SETTING', 3, 2, 'big_endian', False, 1, 0, 0, 3, 'None', False, None, {3: 'distance_adj', 2: 'tbd', 1: 'lkas_button', 0: 'none'}, None),
+    #              signal('COUNTER', 29, 2, 'big_endian', False, 1, 0, 0, 3, 'None', False, None, None, None),
+    #              signal('CHECKSUM', 27, 4, 'big_endian', False, 1, 0, 0, 3, 'None', False, None, None, None)]},
+
+    d = {7: 'tbd', 6: 'tbd', 5: 'tbd', 4: 'accel_res', 3: 'decel_set', 2: 'cancel', 1: 'main', 0: 'none'}
+    button_name_to_id = {}
+    for k in d.keys():
+        button_name_to_id[d[k]] = k
+    cruise_set_to_id = {}
+    d = {3: 'distance_adj', 2: 'tbd', 1: 'lkas_button', 0: 'none'}
+    for k in d.keys():
+        cruise_set_to_id[d[k]] = k
+
+    cruise_b = button_name_to_id[cruise_button_press]
+    cruise_set = cruise_set_to_id[cruise_setting]
+    total = cruise_b << 5 | cruise_set << 2
+
+    msg = struct.pack("!BBB", total, 0, 0)
+
+    return make_can_msg(662, msg, idx, 0)
+
+
 def create_gas_command(gas_amount, idx):
     """Creates a CAN message for the Honda DBC GAS_COMMAND."""
     # enable_bit = 1 << 7
@@ -84,6 +113,29 @@ def create_gas_command(gas_amount, idx):
         enable_bit = 0
     msg = struct.pack("!HHB", gas_amount_1, gas_amount_2, enable_bit)
     return make_can_msg(0x200, msg, idx, 0)
+
+def create_engine_data(xmission_speed, engine_rpm=2000, odometer=3, idx=0):
+    # Looks like:
+    # (344, 827, "\x15[\x07^\x15;\xa3'", 1)
+    # {'CHECKSUM': 7, 'ENGINE_RPM': 1886, 'COUNTER': 2, 'XMISSION_SPEED': 54.67, 'ODOMETER': 1.725844, 'XMISSION_SPEED2': 54.35}
+
+    # xmission_speed =  # 0 - 25000, 250kph
+    xmission_speed *= 100.0
+    if xmission_speed < 0:
+        xmission_speed = 0
+    odometer *= 100.0
+    if odometer > 255:
+        odometer = 254
+    xmission_speed2 = xmission_speed # 0 - 25000
+    engine_rpm = engine_rpm  # 2000~
+    # odometer 0 - 255km
+    # struct.pack("!H", xmission_speed)
+    # struct.pack("!H", engine_rpm)
+    # struct.pack("!H", xmission_speed2)
+
+
+    msg = struct.pack("!HHHB", xmission_speed, engine_rpm, xmission_speed2, odometer)
+    return make_can_msg(0x158, msg, idx, 0)
 
 
 def create_steering_control(apply_steer, idx):
