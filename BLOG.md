@@ -12,15 +12,19 @@ We needed to connect to one of the CAN buses (it has two). We made a connector t
 to the camera thing.
 
 Pinout of the connector of MobilEye:
+
 ![](images/pinout_civic_connector.jpg)
 
 Pinout of the ODB II connector:
+
 ![](images/pinout_connector.jpg)
 
 Which the hacky setup of the panda board connected to the MobilEye connector in the car looks like:
+
 ![](images/setup_panda_in_civic.jpg)
 
 Would have been better to use the [Giraffe adapter](https://shop.comma.ai/products/giraffe-honda) if we had one:
+
 ![](images/honda-06_480x480.jpg)
 
 
