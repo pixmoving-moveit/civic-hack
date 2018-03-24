@@ -1,6 +1,8 @@
 # Blog about how we got where we got
 
-For the Honda Civic 2016 from the pixmoving moveit hackathon:
+![](images/pixmoving.png)
+
+For the Honda Civic 2016 from the PixMoving MoveIt hackathon:
 
 ![](images/honda_civic_pixmoving.jpg)
 
@@ -18,7 +20,11 @@ Pinout of the ODB II connector:
 Which the hacky setup of the panda board connected to the MobilEye connector in the car looks like:
 ![](images/setup_panda_in_civic.jpg)
 
-We used a Pandacan board ([wiki](https://community.comma.ai/wiki/index.php/Panda#LED_Indicators), [github docs](https://github.com/commaai/panda), [how to get started](https://medium.com/@comma_ai/a-panda-and-a-cabana-how-to-get-started-car-hacking-with-comma-ai-b5e46fae8646)) to connect to the CAN bus and a laptop to it. 
+Would have been better to use the [Giraffe adapter](https://shop.comma.ai/products/giraffe-honda) if we had one:
+![](images/honda-06_480x480.jpg)
+
+
+We used a Pandacan board ([wiki](https://community.comma.ai/wiki/index.php/Panda#LED_Indicators), [github docs](https://github.com/commaai/panda), [how to get started](https://medium.com/@comma_ai/a-panda-and-a-cabana-how-to-get-started-car-hacking-with-comma-ai-b5e46fae8646) [hardware guide](https://github.com/commaai/panda/blob/master/docs/guide.pdf)) to connect to the CAN bus and a laptop to it. 
 
 It's extremely easy to use, just install `pip install pandacan` and you can be reading the CAN bus with:
 
@@ -39,8 +45,7 @@ Note that you may need to add [linux udev rules](https://community.comma.ai/wiki
 
 ## Understand the CAN data
 
-We looked at the [comma.ai openpilot](https://github.com/commaai/openpilot) project. There is useful code for many cars. We found difficult to compile the dependences so we extracted
-the useful bits for us for our car.
+We looked at the [comma.ai openpilot](https://github.com/commaai/openpilot) project. There is useful code for many cars. We found difficult to compile the dependences so we extracted the useful bits for us for our car.
 
 Those were:
 * DBC file for Honda Civic 2016: [honda_civic_touring_2016_can_generated.dbc](https://github.com/commaai/openpilot/blob/devel/opendbc/honda_civic_touring_2016_can_generated.dbc) (Which we needed to modify slightly to allow cantools library to load it).
@@ -136,9 +141,13 @@ that the steering could only do minimal torque but we could not making rotate th
 
 And also that in theory the car cannot be commanded under 12mph (20km/h~). Seems to be true.
 
-## Understanding the steering of the car
-
 
 ## Hacking the torque sensor on the steering wheel to send steering commands
+
+Seems to be feasible. Sensor readout seemed to be varying from 0.5V(max right torque) to 4.5V (max left torque). With 2.5V at 0 torque. Th sensor output would need to be studied more closely with an oscilloscope to see if ther is any kind of modulation on the signal in order to authenticates it.
+
+To provide a good position control, we would have had to tap directly on the SAS (steering angle sensor) to get an angle readout in real time. The CAN readout could have been used also at the expence of a slower control loop.
+
+It would have been a good idea to also read the original torque signals to trigger a disengagement of the drive by wire mode (DBW).
 
 
